@@ -1,7 +1,7 @@
 {
   "name": "meteor-smart-router",
   "version": "1.0.1",
-  "description": "The router helper which allows setting up routes with less boilerplate",
+  "description": "The Meteor FlowRouter helper which allows setting up routes with less boilerplate",
   "main": "lib/index.js",
   "scripts": {
     "compile": "babel --presets es2015 -d lib/ src/",

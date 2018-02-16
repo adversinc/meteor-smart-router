@@ -1,4 +1,10 @@
-Routes. Should be called _before_ all other files to ensure that our
+This is a Meteor FlowRouter helper which allows setting up routes with less
+boilerplate. Basically, the routes are being prepared as a set of
+properties.
+
+Still much to do.
+
+Should be called _before_ all other files to ensure that our
 custom routes (e.g. signup) have a priority over useraccounts
 
 ROUTE SETTINGS
