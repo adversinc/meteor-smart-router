@@ -67,7 +67,7 @@ function route(defaultSet, routes) {
 		opts.triggersEnter = [];
 		opts.triggersExit = [];
 
-		if(!currentRoute.allowPublic) {
+		if(!currentRoute.allowPublic && AccountsTemplates !== undefined) {
 			opts.triggersEnter.push(AccountsTemplates.ensureSignedIn);
 		}
 
