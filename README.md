@@ -54,6 +54,11 @@ route is being rendered.
 Also, to (possibly) notify user about page loading, router adds
 "routers-switching" class to the body while new route is loading.
 
+## Custom body classes
+
+The custom body classes can be set for the specific route or the whole website.
+Set route.bodyClass, defaultSet.bodyClass to string or array of strings.
+
 PAGE TITLE
 -----
 

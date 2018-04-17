@@ -36,9 +36,7 @@ function route(defaultSet, routes) {
 				// Remove previous body classes
 				const bodyTag = $("body");
 
-				removeBodyClasses.forEach((c) => {
-					bodyTag.removeClass(c);
-				});
+				bodyTag.removeClass(removeBodyClasses.join(" "));
 
 				// Set new body classes
 
@@ -52,10 +50,27 @@ function route(defaultSet, routes) {
 					routePath = "index";
 				}
 
-				bodyTag.addClass("page-" + routePath);
-				bodyTag.addClass(routes[route].bodyClass);
+				const bodyClasses = ["page-" + routePath];
+				removeBodyClasses.push("page-" + routePath);
 
-				removeBodyClasses.push("page-" + routePath, routes[route].bodyClass);
+				if(defaultSet.bodyClass) {
+					let v = defaultSet.bodyClass;
+					if(typeof(v) == "string") {
+						v = [v];
+					}
+					Array.prototype.push.apply(bodyClasses, v);
+				}
+				if(routes[route].bodyClass) {
+					let v = routes[route].bodyClass;
+					if(typeof(v) == "string") {
+						v = [v];
+					}
+
+					Array.prototype.push.apply(bodyClasses, v);
+					Array.prototype.push.apply(removeBodyClasses, v);
+				}
+
+				bodyTag.addClass(bodyClasses.join(" "));
 
 				BlazeLayout.render(layout,
 					Object.assign({}, defaultSet, routes[route])
