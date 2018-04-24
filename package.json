@@ -1,6 +1,6 @@
 {
   "name": "meteor-smart-router",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "The Meteor FlowRouter helper which allows setting up routes with less boilerplate",
   "main": "lib/index.js",
   "scripts": {
