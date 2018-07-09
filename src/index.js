@@ -1,4 +1,37 @@
 /**
+ *
+ * @typedef {Object} RouteEntry
+ * @property {String} parent The path of the parent route (used for title etc)
+ * @property {String} layout - the layout to use for this route "App_Layout"
+ * @property {RouteType} type The route type (default REGULAR)
+ *
+ * @property {Boolean} allowPublic - is this page can be accessed without Meteor.userId()
+ * @property {String} redirectIfLogged - If logged in, redirect user to this route
+ * @property {String} bodyClass The class name to add to the body when this route is active
+ * @property {String} title The window title. With be joined with parent's one using dash
+ * @property {Function} dynamicTemplate The function to load template
+ * dynamically
+ * @property {String} other_entries Other entries are being used as names of
+ * templates in layout ("top", "left" etc)
+ *
+ * @example
+ * "/path": {
+ * 	dynamicTemplate() {
+ * 		return import("/imports/ui/pages/public/text-pages/terms")
+ * 	},
+ * }
+ */
+
+/**
+ * @enum {String}
+ */
+const RouteType = {
+	REGULAR: 0,
+	SIGNIN: 1,
+	SIGNUP: 2,
+};
+
+/**
  * The classes to automatically remove on next route entry. The automatically
  * added "page-*" body class goes here to be removed in next route.
  *
@@ -82,8 +115,23 @@ function route(defaultSet, routes) {
 		opts.triggersEnter = [];
 		opts.triggersExit = [];
 
-		if(!currentRoute.allowPublic && typeof AccountsTemplates != "undefined") {
-			opts.triggersEnter.push(AccountsTemplates.ensureSignedIn);
+		if (!currentRoute.allowPublic) {
+			if(typeof AccountsTemplates !== "undefined") {
+				opts.triggersEnter.push(AccountsTemplates.ensureSignedIn);
+			} else {
+				opts.triggersEnter.push(() => {
+					customEnsureSignedIn(currentRoute, routes);
+				});
+			}
+		}
+
+		// If logged in, and redirectIfLogged, then redirect
+		if(currentRoute.redirectIfLogged) {
+			opts.triggersEnter.push(() => {
+				if(Meteor.userId()) {
+					FlowRouter.go(currentRoute.redirectIfLogged);
+				}
+			});
 		}
 
 		opts.triggersExit.push(() => {
@@ -113,6 +161,25 @@ function route(defaultSet, routes) {
 	});
 }
 
+
+/**
+ * Called when specific route is !allowPublic, and we are not using
+ * MeteorTemplates
+ * @param currentRoute
+ * @param routes
+ */
+function customEnsureSignedIn(currentRoute, routes) {
+	// If not logged in, find the "SIGNUP" route and redirect there
+	if(Meteor.userId() === null) {
+		Object.keys(routes).forEach((route) => {
+			if(routes[route].type === RouteType.SIGNIN) {
+				FlowRouter.go(route);
+			}
+		});
+	}
+}
+
 export default {
 	route,
+	RouteType,
 };
