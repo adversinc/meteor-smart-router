@@ -76,7 +76,7 @@ function route(defaultSet, routes) {
 				var routePath = route
 					.replace(/\?.*$/, "")
 					.replace(/^\//, "")
-					.replace(/[^a-z0-9A-Z]/g, "-")
+					.replace(/[^a-z0-9A-Z_]/g, "-")
 					.replace(/-{2,}/g, "-");
 
 				if(routePath == "") {
