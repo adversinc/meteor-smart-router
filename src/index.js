@@ -41,6 +41,13 @@ const RouteType = {
  */
 const removeBodyClasses = [];
 
+Tracker.autorun(() => {
+	const pt = Session.get("document.title");
+	if(pt) {
+		document.title = pt + " - " + document._originalTitle;
+	}
+});
+
 /**
  * Automatically generate routes based on a given config.
  * @param defaultSet {Object} - default settings for all routes
@@ -65,6 +72,7 @@ function route(defaultSet, routes) {
 					titles.unshift(routes[route].title);
 				}
 				document.title = titles.join(" - ");
+				document._originalTitle = document.title;
 
 				// Remove previous body classes
 				const bodyTag = $("body");

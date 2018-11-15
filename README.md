@@ -62,10 +62,12 @@ Set route.bodyClass, defaultSet.bodyClass to string or array of strings.
 PAGE TITLE
 -----
 
-Page title is being constructed using:
-1. current route "title" value
-2. the value of the "parent" route (see ROUTE INHERITANCE)
-3. the default title
+Page title is being constructed using the following parts:
+
+1. session.get("document.title")
+2. current route "title" value
+3. the value of the "parent" route (see ROUTE INHERITANCE)
+4. the default title
 
 These values are being joined with " - ".
 
