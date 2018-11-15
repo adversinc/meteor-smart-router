@@ -79,7 +79,7 @@ function route(defaultSet, routes) {
 					.replace(/[^a-z0-9A-Z_]/g, "-")
 					.replace(/-{2,}/g, "-");
 
-				if(routePath == "") {
+				if(routePath === "") {
 					routePath = "index";
 				}
 
@@ -88,14 +88,14 @@ function route(defaultSet, routes) {
 
 				if(defaultSet.bodyClass) {
 					let v = defaultSet.bodyClass;
-					if(typeof(v) == "string") {
+					if(typeof(v) === "string") {
 						v = [v];
 					}
 					Array.prototype.push.apply(bodyClasses, v);
 				}
 				if(routes[route].bodyClass) {
 					let v = routes[route].bodyClass;
-					if(typeof(v) == "string") {
+					if(typeof(v) === "string") {
 						v = [v];
 					}
 
@@ -170,7 +170,7 @@ function route(defaultSet, routes) {
  */
 function customEnsureSignedIn(currentRoute, routes) {
 	// If not logged in, find the "SIGNUP" route and redirect there
-	if(Meteor.userId() === null) {
+	if(Meteor.userId && Meteor.userId() === null) {
 		Object.keys(routes).forEach((route) => {
 			if(routes[route].type === RouteType.SIGNIN) {
 				FlowRouter.go(route);
