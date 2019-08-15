@@ -116,7 +116,9 @@ function route(defaultSet, routes) {
 				BlazeLayout.render(layout,
 					Object.assign({}, defaultSet, routes[route])
 				);
-			}
+			},
+
+			initialOptions: currentRoute
 		};
 
 		// Allow authorized accounts only
