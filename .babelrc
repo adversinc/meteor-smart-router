@@ -1,5 +1,18 @@
 {
-	"presets": ["@babel/preset-env"],
-	"plugins": ["@babel/plugin-transform-async-to-generator"],
-	"useBuiltIns": "usage"
+	"presets": [
+		[
+			"@babel/preset-env",
+			{
+				"targets": {
+					"node": "10"
+				}
+			}
+		]
+	],
+
+	"plugins": [
+		"@babel/plugin-transform-async-to-generator"
+	]
+
+	//"useBuiltIns": "usage"
 }
