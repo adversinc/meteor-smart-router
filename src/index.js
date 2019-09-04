@@ -43,8 +43,13 @@ const removeBodyClasses = [];
 
 Tracker.autorun(() => {
 	const pt = Session.get("document.title");
+	// Use `-` symbol at the end of string for join without -
 	if(pt) {
-		document.title = pt + " - " + document._originalTitle;
+		if(pt.endsWith("-")) {
+			document.title = pt.substring(0, pt.length-1) + document._originalTitle;
+		} else {
+			document.title = pt + " - " + document._originalTitle;
+		}
 	}
 });
 
