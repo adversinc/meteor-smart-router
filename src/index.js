@@ -82,10 +82,12 @@ function route(defaultSet, routes) {
 				// Remove previous body classes
 				const bodyTag = $("body");
 
-				bodyTag.removeClass(removeBodyClasses.join(" "));
+				const remClasses = removeBodyClasses.join(" ");
+				Meteor.defer(() => {
+					bodyTag.removeClass(remClasses);
+				});
 
 				// Set new body classes
-
 				var routePath = route
 					.replace(/\?.*$/, "")
 					.replace(/^\//, "")
@@ -97,6 +99,7 @@ function route(defaultSet, routes) {
 				}
 
 				const bodyClasses = ["page-" + routePath];
+				removeBodyClasses.length = 0;
 				removeBodyClasses.push("page-" + routePath);
 
 				if(defaultSet.bodyClass) {
