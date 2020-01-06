@@ -82,10 +82,7 @@ function route(defaultSet, routes) {
 				// Remove previous body classes
 				const bodyTag = $("body");
 
-				const remClasses = removeBodyClasses.join(" ");
-				Meteor.defer(() => {
-					bodyTag.removeClass(remClasses);
-				});
+				const remClasses = [...removeBodyClasses];
 
 				// Set new body classes
 				var routePath = route
@@ -119,7 +116,17 @@ function route(defaultSet, routes) {
 					Array.prototype.push.apply(removeBodyClasses, v);
 				}
 
+				// Add required classes
 				bodyTag.addClass(bodyClasses.join(" "));
+
+				// Compare and see which classes should be removed in next tick
+				const filteredRemClasses = remClasses.filter((el) => {
+					return bodyClasses.indexOf(el) < 0;
+				});
+				Meteor.defer(() => {
+					bodyTag.removeClass(filteredRemClasses.join(" "));
+				});
+
 
 				BlazeLayout.render(layout,
 					Object.assign({}, defaultSet, routes[route])
