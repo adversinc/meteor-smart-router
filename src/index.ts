@@ -1,35 +1,61 @@
 /**
+ * The route entry type.
  *
- * @typedef {Object} RouteEntry
- * @property {String} parent The path of the parent route (used for title etc)
- * @property {String} layout - the layout to use for this route "App_Layout"
- * @property {RouteType} type The route type (default REGULAR)
- *
- * @property {Boolean} allowPublic - is this page can be accessed without Meteor.userId()
- * @property {String} redirectIfLogged - If logged in, redirect user to this route
- * @property {String} bodyClass The class name to add to the body when this route is active
- * @property {String} title The window title. With be joined with parent's one using dash
- * @property {Function} dynamicTemplate The function to load template
- * dynamically
- * @property {String} other_entries Other entries are being used as names of
- * templates in layout ("top", "left" etc)
+ * To be extended by template params used as names of templates in layout
+ * ("top", "left" etc)
  *
  * @example
- * "/path": {
- * 	dynamicTemplate() {
- * 		return import("/imports/ui/pages/public/text-pages/terms")
- * 	},
+ * interface RouteParams {
+ *   main?: string;
+ * }
+ *
+ * export interface RouteSet {
+ * 	[key: string]: Route & RouteParams;
  * }
  */
+export interface Route {
+	/** The path of the parent route (used for title etc) */
+	parent?: string;
+	/** The layout to use for this route (e.g. "App_Layout") */
+	layout?: string;
+	/** The route type (default REGULAR) */
+	type?: RouteType;
+	/** Is this page can be accessed without Meteor.userId() */
+	allowPublic?: boolean;
+	/** If logged in, redirect user to this route */
+	redirectIfLogged?: string;
+	/** The class name to add to the body when this route is active */
+	bodyClass?: string[] | string;
+	/** The window title. With be joined with parent's one using dashes */
+	title?: string;
+	/**
+	 * The function to load template dynamically
+	 * @example
+	 * "/path": {
+	 * 	dynamicTemplate() {
+	 * 		return import("/imports/ui/pages/public/text-pages/terms")
+	 * 	},
+	 * }
+	 */
+	dynamicTemplate?: () => Promise<any>;
+}
+
+interface GenericRouteSet {
+	[key: string]: Route;
+}
+
+interface FlowRouterCustomOpts {
+	initialOptions: Route;
+}
 
 /**
  * @enum {String}
  */
-const RouteType = {
-	REGULAR: 0,
-	SIGNIN: 1,
-	SIGNUP: 2,
-};
+export enum RouteType {
+	REGULAR,
+	SIGNIN,
+	SIGNUP,
+}
 
 /**
  * The classes to automatically remove on next route entry. The automatically
@@ -58,8 +84,8 @@ Tracker.autorun(() => {
  * @param defaultSet {Object} - default settings for all routes
  * @param routes {Object} - the set of routes
  */
-function route(defaultSet, routes) {
-	Object.keys(routes).forEach((route) => {
+export function route(defaultSet: Route, routes: GenericRouteSet) {
+	Object.keys(routes).forEach(function (route) {
 		const currentRoute = routes[route];
 
 		let layout = defaultSet.layout;
@@ -67,7 +93,7 @@ function route(defaultSet, routes) {
 			layout = currentRoute.layout;
 		}
 
-		const opts = {
+		const opts: FlowRouterRouteParameters & FlowRouterCustomOpts = {
 			action() {
 				let titles = [defaultSet.title];
 				if(currentRoute.parent && routes[currentRoute.parent]) {
@@ -129,6 +155,7 @@ function route(defaultSet, routes) {
 
 
 				BlazeLayout.render(layout,
+					// @ts-ignore BlazeLayoutStatic is too simple to accept routes
 					Object.assign({}, defaultSet, routes[route])
 				);
 			},
@@ -203,8 +230,3 @@ function customEnsureSignedIn(currentRoute, routes) {
 		});
 	}
 }
-
-export default {
-	route,
-	RouteType,
-};

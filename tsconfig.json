@@ -1,0 +1,27 @@
+{
+	"compilerOptions": {
+		//"sourceMap": true,
+		"allowJs": true,
+		"esModuleInterop": true,
+		"moduleResolution": "Node",
+		"module": "commonjs",
+		"target": "ES2017",
+		"declaration": true,
+
+		"baseUrl": "./",
+		"paths" : {
+			"/*": ["./*"]
+		},
+
+		"typeRoots": [
+			"node_modules/@types",
+			"node_modules/meteor-types-fix/@types"
+		],
+
+		"outDir": "lib"
+	},
+
+	"include": [
+		"./src/*"
+	]
+}
