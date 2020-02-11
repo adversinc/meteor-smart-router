@@ -94,7 +94,7 @@ export function route(defaultSet: Route, routes: GenericRouteSet) {
 		}
 
 		const opts: FlowRouterRouteParameters & FlowRouterCustomOpts = {
-			action() {
+			action: function() {
 				let titles = [defaultSet.title];
 				if(currentRoute.parent && routes[currentRoute.parent]) {
 					titles.unshift(routes[currentRoute.parent].title);
