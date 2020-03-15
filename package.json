@@ -1,6 +1,6 @@
 {
   "name": "meteor-smart-router",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "The Meteor FlowRouter helper which allows setting up routes with less boilerplate",
   "main": "lib/index.js",
   "scripts": {
@@ -8,6 +8,9 @@
     "prepare": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "publish": "yarn run build"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
   },
   "repository": {
     "type": "git",
