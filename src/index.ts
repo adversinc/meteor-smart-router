@@ -1,61 +1,18 @@
-/**
- * The route entry type.
- *
- * To be extended by template params used as names of templates in layout
- * ("top", "left" etc)
- *
- * @example
- * interface RouteParams {
- *   main?: string;
- * }
- *
- * export interface RouteSet {
- * 	[key: string]: Route & RouteParams;
- * }
- */
-export interface Route {
-	/** The path of the parent route (used for title etc) */
-	parent?: string;
-	/** The layout to use for this route (e.g. "App_Layout") */
-	layout?: string;
-	/** The route type (default REGULAR) */
-	type?: RouteType;
-	/** Is this page can be accessed without Meteor.userId() */
-	allowPublic?: boolean;
-	/** If logged in, redirect user to this route */
-	redirectIfLogged?: string;
-	/** The class name to add to the body when this route is active */
-	bodyClass?: string[] | string;
-	/** The window title. With be joined with parent's one using dashes */
-	title?: string;
-	/**
-	 * The function to load template dynamically
-	 * @example
-	 * "/path": {
-	 * 	dynamicTemplate() {
-	 * 		return import("/imports/ui/pages/public/text-pages/terms")
-	 * 	},
-	 * }
-	 */
-	dynamicTemplate?: () => Promise<any>;
-}
+import {
+	SmartRouteOptions,
+	RouteType} from "./types";
 
 interface GenericRouteSet {
-	[key: string]: Route;
+	[key: string]: SmartRouteOptions;
 }
 
 interface FlowRouterCustomOpts {
-	initialOptions: Route;
+	initialOptions: SmartRouteOptions;
 }
 
-/**
- * @enum {String}
- */
-export enum RouteType {
-	REGULAR,
-	SIGNIN,
-	SIGNUP,
-}
+// Re-export
+export {SmartRouteOptions, RouteType};
+
 
 /**
  * The classes to automatically remove on next route entry. The automatically
@@ -84,7 +41,7 @@ Tracker.autorun(() => {
  * @param defaultSet {Object} - default settings for all routes
  * @param routes {Object} - the set of routes
  */
-export function route(defaultSet: Route, routes: GenericRouteSet) {
+export function route(defaultSet: SmartRouteOptions, routes: GenericRouteSet) {
 	Object.keys(routes).forEach(function (route) {
 		const currentRoute = routes[route];
 
@@ -179,9 +136,8 @@ export function route(defaultSet: Route, routes: GenericRouteSet) {
 
 		// If logged in, and redirectIfLogged, then redirect
 		if(currentRoute.redirectIfLogged) {
-			opts.triggersEnter.push(async() => {
-				// @ts-ignore Need meteor types 2+, but they pull a lot of deps
-				if(Meteor.userId() && await Meteor.userAsync()) {
+			opts.triggersEnter.push(() => {
+				if(Meteor.userId()) {
 					FlowRouter.go(currentRoute.redirectIfLogged);
 				}
 			});
