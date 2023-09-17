@@ -1,6 +1,6 @@
 {
   "name": "meteor-smart-router",
-  "version": "2.1.1",
+  "version": "2.1.7",
   "description": "The Meteor FlowRouter helper which allows setting up routes with less boilerplate",
   "main": "lib/index.js",
   "scripts": {
@@ -27,8 +27,8 @@
   },
   "homepage": "https://github.com/adversinc/meteor-smart-router#readme",
   "devDependencies": {
-    "@types/jquery": "^3.5.19",
-    "@types/meteor": "^2.9.4",
+    "@types/jquery": "^3.3.32",
+    "@types/meteor": "^1.4.39",
     "meteor-types-fix": "^2.0.0",
     "typescript": "^5.2.2"
   },
