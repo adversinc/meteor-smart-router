@@ -179,8 +179,9 @@ export function route(defaultSet: Route, routes: GenericRouteSet) {
 
 		// If logged in, and redirectIfLogged, then redirect
 		if(currentRoute.redirectIfLogged) {
-			opts.triggersEnter.push(() => {
-				if(Meteor.userId()) {
+			opts.triggersEnter.push(async() => {
+				// @ts-ignore Need meteor types 2+, but they pull a lot of deps
+				if(Meteor.userId() && await Meteor.userAsync()) {
 					FlowRouter.go(currentRoute.redirectIfLogged);
 				}
 			});

@@ -5,9 +5,8 @@
 		"esModuleInterop": true,
 		"moduleResolution": "Node",
 		"module": "commonjs",
-		"target": "ES2017",
+		"target": "ES2019",
 		"declaration": true,
-		"noImplicitUseStrict": true,
 
 		"baseUrl": "./",
 		"paths" : {
